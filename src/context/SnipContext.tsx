@@ -10,7 +10,7 @@ interface Snippet {
   email: string;
 }
 
-interface SnipContextType {
+export  interface SnipContextType {
   snippet: Snippet[] | null;
   addSnip: (
     title: string,
