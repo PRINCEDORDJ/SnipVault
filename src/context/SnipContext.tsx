@@ -54,7 +54,11 @@ export const SnipProvider = ({ children }: { children: React.ReactNode }) => {
       }, (payload) => {
         const newSnippets = payload.new
         setSnippet((prev: any)=> [...prev, newSnippets])
-      });
+      }).subscribe();
+    
+    return () => {
+      Supabase.removeChannel(channel)
+    }
   },[])
   
 
@@ -84,6 +88,7 @@ export const SnipProvider = ({ children }: { children: React.ReactNode }) => {
       console.error("Error snippets", error.message);
       return;
     }
+    setSnippet((prev)=>prev?.filter((p:any)=> p.id !== id) ?? null)
   };
 
   return (

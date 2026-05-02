@@ -27,7 +27,7 @@ const SnipEditor = () => {
   const navigate = useNavigate();
 
   const Submit = () => {
-    if (!title && !code && !language) {
+    if (!title || !code || !language) {
       setError('Input fields cannot be empty');
       setTimeout(() => {
         setError(null);
