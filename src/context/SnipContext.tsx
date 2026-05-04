@@ -3,6 +3,7 @@ import { useAuth } from "./AuthContext";
 import { Supabase } from "../supabase/Supabase";
 
 interface Snippet {
+  id: number;
   title: string;
   language: string;
   code: string;
@@ -32,12 +33,13 @@ export const SnipProvider = ({ children }: { children: React.ReactNode }) => {
 
     const fetchSnippets = async () => {
         const { data, error } = await Supabase.from('Snippets').select('*').order('created_at', {ascending: true})
-        setSnippet(data)
+       
 
       if (error) {
         console.error('Error Loading Snippets', error.message);
         return;
       }
+       setSnippet(data);
     }
     
   useEffect(() => { 

@@ -41,6 +41,7 @@ const SnipEditor = () => {
     setCode('');
     setLanguage('');
     setNote('')
+    navigate('/')
   }
   return (
     <div>
@@ -71,7 +72,7 @@ const SnipEditor = () => {
                 onChange={(e) => setLanguage(e.target.value)}
                 className="w-full rounded-md p-3 border bg-blue-300"
               >
-                <option value={"language"}>Language</option>
+                <option value={""}>Language</option>
                 {Languages.map((l) => (
                   <option
                     value={l}
