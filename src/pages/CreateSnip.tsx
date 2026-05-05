@@ -1,4 +1,3 @@
-import React from 'react'
 import SnipEditor from '../component/SnipEditor'
 
 const CreateSnip = () => {

@@ -11,8 +11,6 @@ const App = () => {
   const [theme, setTheme] = useState("light");
   const { session } = useAuth();
 
-  const email = session?.user.email;
-
   return (
       <div className={theme}>
         <div className={`dark:bg-slate-900 dark:text-slate-200 min-h-screen`}>

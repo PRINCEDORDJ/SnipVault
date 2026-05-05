@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { Supabase } from "../supabase/Supabase";
 import type { Session } from "@supabase/supabase-js";
-import { redirect } from "react-router-dom";
 
 interface AuthhContextType {
     session: Session | null
