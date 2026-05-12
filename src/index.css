@@ -2,24 +2,39 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+    --color-vault-amber: oklch(0.82 0.16 80);
+    --color-vault-yellow: oklch(0.9 0.17 95);
+}
+
 @layer base{
     *{
         margin:0;
         padding: 0;
+    }
+
+    body{
+        background: white;
+    }
+
+    .dark body{
+        background: black;
     }
 }
 
 ::-webkit-scrollbar{
     width: 5px;
     height: 10px;
-    background-color: rgb(39, 39, 103);
+    background-color: black;
     z-index: 5;
 }
 
 ::-webkit-scrollbar-track{
-    background-color: rgb(18, 18, 76);
+    background-color: black;
 }
 
 ::-webkit-scrollbar-thumb{
     width: 6px;
+    background-color: rgb(245, 158, 11);
+    border-radius: 999px;
 }

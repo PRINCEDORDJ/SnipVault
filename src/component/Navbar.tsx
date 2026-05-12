@@ -1,7 +1,14 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { LayoutGridIcon, Menu, Plus, X , LogOut} from "lucide-react";
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  LayoutGridIcon,
+  LogOut,
+  Menu,
+  Moon,
+  Plus,
+  Sun,
+  X,
+} from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 const NavLinks = [
@@ -17,162 +24,197 @@ const NavLinks = [
   },
 ];
 
-const Navbar = ({ theme, setTheme }: { theme: any, setTheme: any }) => {
-  const [open, setOpen] = useState<boolean>(false)
+const Navbar = ({
+  theme,
+  setTheme,
+}: {
+  theme: string;
+  setTheme: Dispatch<SetStateAction<string>>;
+}) => {
+  const [open, setOpen] = useState<boolean>(false);
   const { logOut } = useAuth();
   const location = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleOut = () => {
     logOut();
-    navigate('/')
-  }
+    navigate("/");
+  };
 
   const toggleTheme = () => {
-      const newTheme = theme === 'light' ? 'dark' : 'light';
+    const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
-  }
-
+  };
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
       setTheme(savedTheme);
     }
-  
-  }, []);
-    
+  }, [setTheme]);
+
   return (
     <>
-      <div className=" absolute left-5 py-2  max-lg:p-0 max-lg:sticky">
-        <div className="  bg-black dark:bg-black/50 backdrop-blur-md min-h-200 lg:min-h-180 md:min-h-185 sm:min-h-180 rounded-full w-17 max-lg:hidden">
-          {/*Desktop Nav*/}
-          <div className=" group-hover:fixed">
-            <div className="flex flex-col items-center justify-center">
-              <Link to="/" className="pt-10">
-                <img src="/logo.png" width={70} />
-              </Link>
-              <div className="flex flex-col gap-5 pt-20 ">
-                {NavLinks.map((l) => {
-                  const isActive = location.pathname === l.path;
-                  const Icon = l.icon;
-
-                  return (
-                    <div
-                      key={l.name}
-                      className="text-lg font-medium dark:text-gray-950"
-                    >
-                      <Link
-                        to={l.path}
-                        title={l.name}
-                        className={`flex flex-col`}
-                      >
-                        <div>
-                          <Icon
-                            size={50}
-                            className={`bg-gray-300  p-3 rounded-full active:scale-95 transiton delay-100 ${isActive ? "text-blue-700 dark:text-blue-700" : ""}`}
-                          />
-                        </div>
-                      </Link>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="absolute bottom-20">
-                <LogOut size={20} color="red" onClick={handleOut} />
-              </div>
-              <div
-                className={`w-10 h-2.5 rounded-full absolute bottom-10 bg-gray-400 mr-5 ml-5 transition delay-75 ${theme === "light" ? "" : "bg-green-400"}`}
-              >
-                <div
-                  className={`w-4.5 h-4.5 -mt-1 rounded-full bg-white transition duration-100 ${theme === "light" ? "translate-x-0" : "translate-x-6"}`}
-                  onClick={toggleTheme}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        {/*Mobile Navigation*/}
-        <div className="lg:hidden z-10 w-full">
-          <div className="bg-black/90  dark:bg-slate-950/50 backdrop-blur-sm text-white dark:text-gray-400 px-2 py-3 flex items-center justify-between ">
-            <Link to={"/"} className="flex items-center gap-2">
+      <div className="fixed left-0 top-0 z-20 w-full lg:left-5 lg:top-4 lg:w-auto">
+        <aside className="hidden h-[calc(100vh-2rem)] w-[78px] rounded-full border border-amber-300/70 bg-white/90 shadow-[0_0_34px_rgba(245,158,11,0.24)] backdrop-blur-xl dark:border-yellow-400/60 dark:bg-black/90 dark:shadow-[0_0_42px_rgba(250,204,21,0.28)] lg:block">
+          <div className="relative flex h-full flex-col items-center">
+            <Link
+              to="/"
+              className="mt-5 rounded-full border border-amber-300/70 bg-white p-1 shadow-[0_0_18px_rgba(245,158,11,0.25)] transition hover:scale-105 dark:bg-black"
+              aria-label="SnipVault dashboard"
+            >
               <img
                 src="/logo.png"
-                width={40}
-                alt="Logo"
-                className="border border-gray-400 rounded-full object-cover"
+                width={54}
+                height={54}
+                alt="SnipVault"
+                className="rounded-full object-cover"
               />
-              <h1 className="text-2xl font-bold">SnipVault</h1>
             </Link>
-            <div>
-              <button onClick={() => setOpen(true)}>
-                <Menu />
+
+            <nav className="mt-18 flex flex-col gap-4">
+              {NavLinks.map((l) => {
+                const isActive = location.pathname === l.path;
+                const Icon = l.icon;
+
+                return (
+                  <Link
+                    key={l.name}
+                    to={l.path}
+                    title={l.name}
+                    aria-label={l.name}
+                    className={`group grid size-12 place-items-center rounded-full border transition-all duration-200 active:scale-95 ${
+                      isActive
+                        ? "border-amber-300 bg-amber-300 text-black shadow-[0_0_20px_rgba(245,158,11,0.48)]"
+                        : "border-zinc-200 bg-white text-zinc-700 hover:border-amber-300 hover:text-black hover:shadow-[0_0_18px_rgba(245,158,11,0.22)] dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300 dark:hover:border-yellow-400 dark:hover:text-yellow-200"
+                    }`}
+                  >
+                    <Icon size={22} strokeWidth={2.2} />
+                  </Link>
+                );
+              })}
+            </nav>
+
+            <div className="absolute bottom-5 flex flex-col items-center gap-4">
+              <button
+                type="button"
+                onClick={toggleTheme}
+                aria-label="Toggle theme"
+                title={theme === "light" ? "Dark mode" : "Light mode"}
+                className="grid size-12 place-items-center rounded-full border border-amber-300/80 bg-white text-zinc-900 shadow-[0_0_18px_rgba(245,158,11,0.2)] transition hover:bg-amber-100 dark:bg-zinc-950 dark:text-yellow-200 dark:hover:bg-yellow-400 dark:hover:text-black"
+              >
+                {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+              </button>
+              <button
+                type="button"
+                onClick={handleOut}
+                aria-label="Log out"
+                title="Log out"
+                className="grid size-12 place-items-center rounded-full border border-red-400/70 bg-white text-red-500 transition hover:bg-red-50 dark:bg-zinc-950 dark:hover:bg-red-950/50"
+              >
+                <LogOut size={20} />
               </button>
             </div>
+          </div>
+        </aside>
+
+        <div className="border-b border-amber-300/70 bg-white/92 px-4 py-3 shadow-[0_8px_26px_rgba(245,158,11,0.14)] backdrop-blur-xl dark:bg-black/92 lg:hidden">
+          <div className="flex items-center justify-between">
+            <Link to="/" className="flex items-center gap-3">
+              <img
+                src="/logo.png"
+                width={42}
+                height={42}
+                alt="SnipVault"
+                className="rounded-full border border-amber-300 object-cover"
+              />
+              <h1 className="text-xl font-black tracking-tight">SnipVault</h1>
+            </Link>
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              className="grid size-11 place-items-center rounded-full border border-amber-300 text-zinc-900 shadow-[0_0_16px_rgba(245,158,11,0.18)] dark:text-zinc-100"
+              aria-label="Open navigation"
+            >
+              <Menu size={22} />
+            </button>
           </div>
         </div>
       </div>
 
       <div
-        className={`fixed right-0 top-0 transition-all delay-150 z-20 backdrop-blur-md ${open ? "w-90" : "w-0 transition delay-300"}`}
+        className={`fixed right-0 top-0 z-30 h-screen overflow-hidden transition-all duration-300 lg:hidden ${
+          open ? "w-full" : "w-0"
+        }`}
       >
-        {" "}
         {open && (
-          <div className="flex flex-col gap-4 w-full bg-black/70 dark:bg-slate-950/70 h-screen backdrop-blur-sm py-5 px-2 rounded-b-lg text-white">
-            <div className="text-white flex justify-between">
-              <h1 className="text-2xl font-bold">SnipVault</h1>
+          <div className="ml-auto flex h-full w-[min(360px,100vw)] flex-col border-l border-amber-300/70 bg-white/95 px-4 py-5 shadow-[-18px_0_36px_rgba(245,158,11,0.18)] backdrop-blur-xl dark:bg-black/95">
+            <div className="flex items-center justify-between">
+              <Link
+                to="/"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3"
+              >
+                <img
+                  src="/logo.png"
+                  width={42}
+                  height={42}
+                  alt="SnipVault"
+                  className="rounded-full border border-amber-300 object-cover"
+                />
+                <h1 className="text-xl font-black tracking-tight">SnipVault</h1>
+              </Link>
               <button
-                onClick={() => setOpen(!open)}
-                className="bg-gray-400/50 rounded-md w-7 flex items-center justify-center"
+                type="button"
+                onClick={() => setOpen(false)}
+                className="grid size-10 place-items-center rounded-full border border-amber-300/80"
+                aria-label="Close navigation"
               >
                 <X size={20} />
               </button>
             </div>
-            <div className="flex flex-col gap-4 pt-5 text-lg">
+
+            <nav className="mt-10 flex flex-col gap-3">
               {NavLinks.map((l) => {
                 const isActive = location.pathname === l.path;
-
                 const Icon = l.icon;
 
                 return (
-                  <div key={l.name} className=" ">
-                    <Link
-                      to={l.path}
-                      className={`group`}
-                      onClick={() => setOpen(false)}
-                    >
-                      <div
-                        className={`flex items-center gap-4 group-hover:border p-2 rounded-md ${isActive && "border border-gray-200/30 dark:bg-slate-900/50"}`}
-                      >
-                        <div>
-                          <Icon size={25} />
-                        </div>
-                        <div>{l.name}</div>
-                      </div>
-                    </Link>
-                  </div>
+                  <Link
+                    key={l.name}
+                    to={l.path}
+                    onClick={() => setOpen(false)}
+                    className={`flex items-center gap-3 rounded-full border px-4 py-3 text-sm font-bold transition ${
+                      isActive
+                        ? "border-amber-300 bg-amber-300 text-black shadow-[0_0_20px_rgba(245,158,11,0.34)]"
+                        : "border-zinc-200 hover:border-amber-300 dark:border-zinc-800 dark:hover:border-yellow-400"
+                    }`}
+                  >
+                    <Icon size={20} />
+                    {l.name}
+                  </Link>
                 );
               })}
-              <div className="border-3 absolute bottom-4 p-0.5 border-red-500 rounded-xl">
-                <button
-                  onClick={handleOut}
-                  className=" w-85 bg-red-500 p-2 rounded-lg"
-                >
-                  Log Out
-                </button>
-              </div>
-            </div>
-            <div className="text-white flex items-center justify-between border border-gray-200/50 rounded-md p-3 fixed bottom-20 w-85">
-              <div>{theme === "light" ? "Light Mode" : "Dark Mode"}</div>
-              <div
-                className={`w-15 h-2.5 rounded-full bg-gray-400 mr-5 ml-5 transition delay-75 ${theme === "light" ? "" : "bg-green-400"}`}
+            </nav>
+
+            <div className="mt-auto flex flex-col gap-3 pb-2">
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="flex items-center justify-between rounded-full border border-amber-300/80 px-4 py-3 text-sm font-bold"
               >
-                <div
-                  className={`w-4.5 h-4.5 -mt-1 rounded-full bg-white transition duration-100 ${theme === "light" ? "translate-x-0" : "translate-x-11"}`}
-                  onClick={toggleTheme}
-                />
-              </div>
+                <span>{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
+                {theme === "light" ? <Moon size={19} /> : <Sun size={19} />}
+              </button>
+              <button
+                type="button"
+                onClick={handleOut}
+                className="flex items-center justify-center gap-2 rounded-full border border-red-400/80 px-4 py-3 text-sm font-bold text-red-500"
+              >
+                <LogOut size={18} />
+                Log Out
+              </button>
             </div>
           </div>
         )}

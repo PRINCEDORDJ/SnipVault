@@ -1,8 +1,7 @@
 import { useState } from "react";
+import { Check, ChevronDown, ChevronUp, Copy, Trash2 } from "lucide-react";
 import { useSnip } from "../context/SnipContext";
-import { Trash2, ChevronDown, ChevronUp, Copy, Check } from "lucide-react";
 
-// Matches exactly what Supabase returns — id comes from the database
 interface SnippetProps {
   snippet: {
     id: number;
@@ -13,8 +12,6 @@ interface SnippetProps {
   };
 }
 
-// Maps language names to badge colors
-// Extend this as you add more languages
 const LANG_COLORS: Record<string, string> = {
   HTML: "bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300",
   CSS: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
@@ -24,108 +21,87 @@ const LANG_COLORS: Record<string, string> = {
   Python:
     "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
   "C#": "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300",
-  C: "bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300",
+  C: "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300",
   "C++": "bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-300",
   Rust: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
   Java: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
-  Other: "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300",
+  Other: "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300",
 };
 
 const SnipTemplate = ({ snippet }: SnippetProps) => {
-  // Controls whether the code block is visible
   const [expanded, setExpanded] = useState(false);
-
-  // Controls the "Copied!" feedback on the copy button
   const [copied, setCopied] = useState(false);
-
-  // Pull deleteSnip from context — we need it for the delete button
   const { deleteSnip } = useSnip()!;
+  const badgeColor = LANG_COLORS[snippet.language] ?? LANG_COLORS.Other;
 
-  const badgeColor = LANG_COLORS[snippet.language] ?? LANG_COLORS["Other"];
-
-  // Writes the code to clipboard and shows "Copied!" for 2 seconds
   const handleCopy = () => {
     navigator.clipboard.writeText(snippet.code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Deletes from Supabase — SnipContext handles removing it from local state
   const handleDelete = () => {
     deleteSnip(snippet.id);
   };
 
   return (
-    <div className="border border-gray-200 dark:border-slate-700 rounded-xl overflow-hidden bg-white dark:bg-slate-800 transition-shadow hover:shadow-md">
-      {/* ── Card header — always visible, click to expand ── */}
-      <div
-        className="flex items-start justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
+    <article className="overflow-hidden rounded-[1.6rem] border border-amber-300/70 bg-white shadow-[0_0_26px_rgba(245,158,11,0.1)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0_34px_rgba(245,158,11,0.2)] dark:bg-black">
+      <button
+        type="button"
+        className="flex w-full cursor-pointer items-start justify-between gap-3 p-4 text-left transition-colors hover:bg-amber-50/60 dark:hover:bg-yellow-400/5"
         onClick={() => setExpanded(!expanded)}
       >
-        <div className="flex flex-col gap-1 flex-1 min-w-0">
-          {/* Title — truncate if too long */}
-          <h3 className="font-semibold text-sm truncate pr-2">
-            {snippet.title}
-          </h3>
-
-          {/* Note — only render the element if a note exists */}
+        <div className="flex min-w-0 flex-1 flex-col gap-1">
+          <h3 className="truncate pr-2 text-sm font-black">{snippet.title}</h3>
           {snippet.note && (
-            <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
+            <p className="line-clamp-1 text-xs text-zinc-500 dark:text-zinc-400">
               {snippet.note}
             </p>
           )}
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
-          {/* Language badge */}
-          <span
-            className={`text-xs font-semibold px-2.5 py-1 rounded-full ${badgeColor}`}
-          >
+        <div className="flex shrink-0 items-center gap-2">
+          <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${badgeColor}`}>
             {snippet.language}
           </span>
-
-          {/* Expand/collapse chevron */}
-          <div className="text-gray-400">
+          <span className="text-amber-600 dark:text-yellow-300">
             {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-          </div>
+          </span>
         </div>
-      </div>
+      </button>
 
-      {/* ── Code block — only renders when expanded ── */}
       {expanded && (
-        <div className="border-t border-gray-100 dark:border-slate-700">
-          <pre className="p-4 text-xs font-mono leading-relaxed overflow-x-auto max-h-64 bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-gray-200">
+        <div className="border-t border-amber-300/60">
+          <pre className="max-h-64 overflow-x-auto bg-zinc-950 p-4 font-mono text-xs leading-relaxed text-amber-50">
             {snippet.code}
           </pre>
         </div>
       )}
 
-      {/* ── Card footer — copy and delete buttons ── */}
-      <div className="flex items-center justify-end gap-2 px-4 py-2.5 border-t border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/80">
-        {/* Copy button — icon swaps to a checkmark when copied */}
+      <div className="flex items-center justify-end gap-2 border-t border-amber-300/60 bg-amber-50/45 px-4 py-2.5 dark:bg-yellow-400/5">
         <button
+          type="button"
           onClick={handleCopy}
-          className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border font-medium transition-colors
-            ${
-              copied
-                ? "bg-green-50 border-green-300 text-green-700 dark:bg-green-900/30 dark:border-green-700 dark:text-green-400"
-                : "bg-white dark:bg-slate-700 border-gray-200 dark:border-slate-600 text-gray-500 dark:text-gray-400 hover:text-blue-600 hover:border-blue-300"
-            }`}
+          className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+            copied
+              ? "border-green-300 bg-green-50 text-green-700 dark:border-green-700 dark:bg-green-900/30 dark:text-green-400"
+              : "border-amber-300/70 bg-white text-zinc-600 hover:text-black hover:shadow-[0_0_14px_rgba(245,158,11,0.2)] dark:bg-black dark:text-zinc-300 dark:hover:text-yellow-200"
+          }`}
         >
           {copied ? <Check size={12} /> : <Copy size={12} />}
           {copied ? "Copied!" : "Copy"}
         </button>
 
-        {/* Delete button — calls deleteSnip from context */}
         <button
+          type="button"
           onClick={handleDelete}
-          className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border bg-white dark:bg-slate-700 border-gray-200 dark:border-slate-600 text-gray-500 dark:text-gray-400 hover:text-red-600 hover:border-red-300 dark:hover:text-red-400 font-medium transition-colors"
+          className="flex items-center gap-1.5 rounded-lg border border-amber-300/70 bg-white px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:border-red-300 hover:text-red-600 dark:bg-black dark:text-zinc-300 dark:hover:text-red-400"
         >
           <Trash2 size={12} />
           Delete
         </button>
       </div>
-    </div>
+    </article>
   );
 };
 

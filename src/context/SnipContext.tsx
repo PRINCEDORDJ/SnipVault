@@ -17,8 +17,7 @@ export  interface SnipContextType {
     title: string,
     language: string,
     code: string,
-    note: string,
-    email: string,
+    note: string
   ) => void;
   deleteSnip: (id: number) => void;
 }

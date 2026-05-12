@@ -8,36 +8,36 @@ import Confirmation from "./component/Confirm";
 import { useAuth } from "./context/AuthContext";
 
 const App = () => {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem("theme") ?? "light",
+  );
   const { session } = useAuth();
 
   return (
-      <div className={theme}>
-        <div className={`dark:bg-slate-900 dark:text-slate-200 min-h-screen`}>
-          <Router>
-            {session ? (
-              <div className="flex max-lg:flex-col gap-2 max-lg:gap-5">
-                <div className="fixed w-full">
-                  <Navbar theme={theme} setTheme={setTheme} />
-                </div>
-                <div className="lg:pl-30 md:pl-30 pt-15 sm:pt-15 max-lg:pt-20 max-lg:px-2 min-h-screen w-full">
-                  <Routes>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/create" element={<CreateSnip />} />
-                  </Routes>
-                </div>
-              </div>
-            ) : (
-              <div>
+    <div className={theme}>
+      <div className="min-h-screen bg-white text-zinc-950 transition-colors duration-300 dark:bg-black dark:text-zinc-100">
+        <Router>
+          {session ? (
+            <div className="min-h-screen">
+              <Navbar theme={theme} setTheme={setTheme} />
+              <div className="min-h-screen w-full px-4 pb-10 pt-24 sm:px-6 lg:pl-[124px] lg:pr-8 lg:pt-8">
                 <Routes>
-                  <Route path="/" element={<Auth />} />
-                  <Route path="/confirm" element={<Confirmation />} />
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/create" element={<CreateSnip />} />
                 </Routes>
               </div>
-            )}
-          </Router>
-        </div>
+            </div>
+          ) : (
+            <div>
+              <Routes>
+                <Route path="/" element={<Auth />} />
+                <Route path="/confirm" element={<Confirmation />} />
+              </Routes>
+            </div>
+          )}
+        </Router>
       </div>
+    </div>
   );
 };
 
