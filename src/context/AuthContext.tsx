@@ -4,6 +4,7 @@ import type { Session } from "@supabase/supabase-js";
 
 interface AuthhContextType {
     session: Session | null
+    loading: boolean
   logIn: (email: string, password: string) => void;
     signUp: (email: string, password: string) => void;
     logOut: ()=> void
@@ -13,10 +14,15 @@ export const AuthContext = createContext<AuthhContextType | undefined>(undefined
 
 export const AuthProvider = ({children}: {children: React.ReactNode})=>{
     const [session, setSession] = useState<Session | null>(null)
+    const [loading, setLoading] = useState(true)
 
     const fetchSession = async() => {
-        const currentSession = await Supabase.auth.getSession()
-        setSession(currentSession.data.session)
+        try {
+            const currentSession = await Supabase.auth.getSession()
+            setSession(currentSession.data.session)
+        } finally {
+            setLoading(false)
+        }
     }
 
     useEffect(() => {
@@ -63,7 +69,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode})=>{
     }
     
     return (
-        <AuthContext.Provider value={{ session, logIn, signUp, logOut}}>
+        <AuthContext.Provider value={{ session, loading, logIn, signUp, logOut}}>
             {children}
         </AuthContext.Provider>
     )
