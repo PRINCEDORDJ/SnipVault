@@ -7,12 +7,25 @@ const Auth = () => {
   const [register, setRegister] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const { logIn, signUp } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    setAuthError(null);
+
     if (register) {
-      signUp(email, password);
+      setSubmitting(true);
+      const error = await signUp(email, password).finally(() => {
+        setSubmitting(false);
+      });
+
+      if (error) {
+        setAuthError(error);
+        return;
+      }
+
       navigate("/confirm");
     } else {
       logIn(email, password);
@@ -106,6 +119,7 @@ const Auth = () => {
                     placeholder="you@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    required
                     className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-zinc-400"
                   />
                 </span>
@@ -123,17 +137,25 @@ const Auth = () => {
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
                     className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-zinc-400"
                   />
                 </span>
               </label>
 
+              {authError && (
+                <p className="rounded-2xl border border-red-300 bg-red-50 px-4 py-3 text-sm font-bold text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300">
+                  {authError}
+                </p>
+              )}
+
               <button
                 type="submit"
+                disabled={submitting}
                 className="mt-2 flex items-center justify-center gap-2 rounded-full border border-amber-300 bg-amber-300 px-5 py-3 font-black text-black shadow-[0_0_24px_rgba(245,158,11,0.26)] transition hover:shadow-[0_0_34px_rgba(245,158,11,0.38)] active:scale-[0.99]"
               >
                 {register ? <UserPlus size={18} /> : <ArrowRight size={18} />}
-                {register ? "Sign Up" : "Log In"}
+                {submitting ? "Working..." : register ? "Sign Up" : "Log In"}
               </button>
             </form>
 
