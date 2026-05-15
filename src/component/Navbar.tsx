@@ -142,82 +142,90 @@ const Navbar = ({
           </div>
         </div>
       </div>
+      <div>
+        <div
+          className={`w-full h-screen fixed left-0 top-0 z-20 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ease-in-out lg:hidden ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+          onClick={() => setOpen(false)}
+          aria-hidden="true"
+        />
+        <div
+          className={`fixed right-0 top-0 z-30 w-90 h-screen overflow-hidden transition-transform duration-300 ease-in-out lg:hidden ${
+            open ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+          }`}
+        >
+          {open && (
+            <div className="ml-auto flex h-full w-[min(360px,100vw)] flex-col border-l border-amber-300/70 bg-white/95 px-4 py-5 shadow-[-18px_0_36px_rgba(245,158,11,0.18)] backdrop-blur-xl dark:bg-black/95">
+              <div className="flex items-center justify-between">
+                <Link
+                  to="/"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-3"
+                >
+                  <img
+                    src="/logo.png"
+                    width={42}
+                    height={42}
+                    alt="SnipVault"
+                    className="rounded-full border border-amber-300 object-cover"
+                  />
+                  <h1 className="text-xl font-black tracking-tight">
+                    SnipVault
+                  </h1>
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="grid size-10 place-items-center rounded-full border border-amber-300/80"
+                  aria-label="Close navigation"
+                >
+                  <X size={20} />
+                </button>
+              </div>
 
-      <div
-        className={`fixed right-0 top-0 z-30 h-screen overflow-hidden transition-all duration-300 lg:hidden ${
-          open ? "w-full" : "w-0"
-        }`}
-      >
-        {open && (
-          <div className="ml-auto flex h-full w-[min(360px,100vw)] flex-col border-l border-amber-300/70 bg-white/95 px-4 py-5 shadow-[-18px_0_36px_rgba(245,158,11,0.18)] backdrop-blur-xl dark:bg-black/95">
-            <div className="flex items-center justify-between">
-              <Link
-                to="/"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-3"
-              >
-                <img
-                  src="/logo.png"
-                  width={42}
-                  height={42}
-                  alt="SnipVault"
-                  className="rounded-full border border-amber-300 object-cover"
-                />
-                <h1 className="text-xl font-black tracking-tight">SnipVault</h1>
-              </Link>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="grid size-10 place-items-center rounded-full border border-amber-300/80"
-                aria-label="Close navigation"
-              >
-                <X size={20} />
-              </button>
+              <nav className="mt-10 flex flex-col gap-3">
+                {NavLinks.map((l) => {
+                  const isActive = location.pathname === l.path;
+                  const Icon = l.icon;
+
+                  return (
+                    <Link
+                      key={l.name}
+                      to={l.path}
+                      onClick={() => setOpen(false)}
+                      className={`flex items-center gap-3 rounded-full border px-4 py-3 text-sm font-bold transition ${
+                        isActive
+                          ? "border-amber-300 bg-amber-300 text-black shadow-[0_0_20px_rgba(245,158,11,0.34)]"
+                          : "border-zinc-200 hover:border-amber-300 dark:border-zinc-800 dark:hover:border-yellow-400"
+                      }`}
+                    >
+                      <Icon size={20} />
+                      {l.name}
+                    </Link>
+                  );
+                })}
+              </nav>
+
+              <div className="mt-auto flex flex-col gap-3 pb-2">
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  className="flex items-center justify-between rounded-full border border-amber-300/80 px-4 py-3 text-sm font-bold"
+                >
+                  <span>{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
+                  {theme === "light" ? <Moon size={19} /> : <Sun size={19} />}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleOut}
+                  className="flex items-center justify-center gap-2 rounded-full border border-red-400/80 px-4 py-3 text-sm font-bold text-red-500"
+                >
+                  <LogOut size={18} />
+                  Log Out
+                </button>
+              </div>
             </div>
-
-            <nav className="mt-10 flex flex-col gap-3">
-              {NavLinks.map((l) => {
-                const isActive = location.pathname === l.path;
-                const Icon = l.icon;
-
-                return (
-                  <Link
-                    key={l.name}
-                    to={l.path}
-                    onClick={() => setOpen(false)}
-                    className={`flex items-center gap-3 rounded-full border px-4 py-3 text-sm font-bold transition ${
-                      isActive
-                        ? "border-amber-300 bg-amber-300 text-black shadow-[0_0_20px_rgba(245,158,11,0.34)]"
-                        : "border-zinc-200 hover:border-amber-300 dark:border-zinc-800 dark:hover:border-yellow-400"
-                    }`}
-                  >
-                    <Icon size={20} />
-                    {l.name}
-                  </Link>
-                );
-              })}
-            </nav>
-
-            <div className="mt-auto flex flex-col gap-3 pb-2">
-              <button
-                type="button"
-                onClick={toggleTheme}
-                className="flex items-center justify-between rounded-full border border-amber-300/80 px-4 py-3 text-sm font-bold"
-              >
-                <span>{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
-                {theme === "light" ? <Moon size={19} /> : <Sun size={19} />}
-              </button>
-              <button
-                type="button"
-                onClick={handleOut}
-                className="flex items-center justify-center gap-2 rounded-full border border-red-400/80 px-4 py-3 text-sm font-bold text-red-500"
-              >
-                <LogOut size={18} />
-                Log Out
-              </button>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </>
   );
