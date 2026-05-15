@@ -7,6 +7,7 @@ import { useState } from "react";
 import Confirmation from "./component/Confirm";
 import { useAuth } from "./context/AuthContext";
 import { Loader2 } from "lucide-react";
+import { Analytics } from "@vercel/analytics/react";
 
 const App = () => {
   const [theme, setTheme] = useState(
@@ -47,6 +48,7 @@ const App = () => {
             )}
           </Router>
         )}
+        <Analytics />
       </div>
     </div>
   );
