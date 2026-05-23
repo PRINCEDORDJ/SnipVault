@@ -87,11 +87,11 @@ const Dashboard = () => {
         <SearchBar />
       </section>
 
-      <section className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {filtered && filtered.length > 0 ? (
           filtered.map((s) => <SnipTemplate key={s.id} snippet={s} />)
         ) : (
-          <p className="rounded-[2rem] border border-amber-300/70 py-16 text-center text-zinc-500 shadow-[0_0_26px_rgba(245,158,11,0.1)] dark:text-zinc-400 xl:col-span-2">
+          <p className="rounded-[2rem] border border-amber-300/70 py-16 text-center text-zinc-500 shadow-[0_0_26px_rgba(245,158,11,0.1)] dark:text-zinc-400 md:col-span-2 lg:col-span-3">
             No snippets found.
           </p>
         )}
