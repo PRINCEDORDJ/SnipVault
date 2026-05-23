@@ -6,6 +6,7 @@ import Auth from "./pages/Auth";
 import { useState } from "react";
 import Confirmation from "./component/Confirm";
 import { useAuth } from "./context/AuthContext";
+import { SearchProvider } from "./context/SearchContext";
 import { Loader2 } from "lucide-react";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -13,7 +14,9 @@ const App = () => {
   const [theme, setTheme] = useState(
     () => localStorage.getItem("theme") ?? "light",
   );
+  console.log("[v0] App component rendering");
   const { session, loading } = useAuth();
+  console.log("[v0] Auth state:", { session: session ? "logged in" : "logged out", loading });
 
   return (
     <div className={theme}>
@@ -27,26 +30,28 @@ const App = () => {
             <span className="sr-only">Loading</span>
           </div>
         ) : (
-          <Router>
-            {session ? (
-              <div className="min-h-screen">
-                <Navbar theme={theme} setTheme={setTheme} />
-                <div className="min-h-screen w-full px-4 pb-10 pt-24 sm:px-6 lg:pl-[124px] lg:pr-8 lg:pt-8">
+          <SearchProvider>
+            <Router>
+              {session ? (
+                <div className="min-h-screen">
+                  <Navbar theme={theme} setTheme={setTheme} />
+                  <div className="min-h-screen w-full px-4 pb-10 pt-24 sm:px-6 lg:pl-[124px] lg:pr-8 lg:pt-8">
+                    <Routes>
+                      <Route path="/" element={<Dashboard />} />
+                      <Route path="/create" element={<CreateSnip />} />
+                    </Routes>
+                  </div>
+                </div>
+              ) : (
+                <div>
                   <Routes>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/create" element={<CreateSnip />} />
+                    <Route path="/" element={<Auth />} />
+                    <Route path="/confirm" element={<Confirmation />} />
                   </Routes>
                 </div>
-              </div>
-            ) : (
-              <div>
-                <Routes>
-                  <Route path="/" element={<Auth />} />
-                  <Route path="/confirm" element={<Confirmation />} />
-                </Routes>
-              </div>
-            )}
-          </Router>
+              )}
+            </Router>
+          </SearchProvider>
         )}
         <Analytics />
       </div>

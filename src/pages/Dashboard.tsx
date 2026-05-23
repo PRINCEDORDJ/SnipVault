@@ -1,16 +1,24 @@
 import { useState } from "react";
 import { Languages } from "../constants/languages";
 import { useSnip } from "../context/SnipContext";
+import { useSearch } from "../context/SearchContext";
 import SnipTemplate from "../component/SnipTemplate";
 
 const Dashboard = () => {
   const [activeFilter, setActiveFilter] = useState<string>("All");
   const { snippet } = useSnip()!;
+  const { searchQuery } = useSearch()!;
 
-  const filtered =
-    activeFilter === "All"
-      ? snippet
-      : snippet?.filter((s) => s.language === activeFilter);
+  const filtered = snippet?.filter((s) => {
+    const matchesLanguage =
+      activeFilter === "All" || s.language === activeFilter;
+    const matchesSearch = searchQuery.toLowerCase() === "" ||
+      s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      s.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      s.note.toLowerCase().includes(searchQuery.toLowerCase());
+
+    return matchesLanguage && matchesSearch;
+  });
 
   const totalSnips = snippet?.length ?? 0;
   const activeCount = filtered?.length ?? 0;
