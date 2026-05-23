@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { Search, X } from "lucide-react";
 import { useSearch } from "../context/SearchContext";
 
@@ -7,8 +7,18 @@ interface SearchBarProps {
 }
 
 const SearchBar = ({ isMobile = false }: SearchBarProps) => {
-  const { searchQuery, setSearchQuery, clearSearch } = useSearch()!;
+  const { searchQuery, setSearchQuery, clearSearch } = useSearch();
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const keyboardHint = useMemo(() => {
+    if (typeof navigator === "undefined") {
+      return "⌘/Ctrl+K";
+    }
+    const isMac =
+      /Mac|iPhone|iPad|iPod/.test(navigator.userAgent) ||
+      navigator.platform.startsWith("Mac");
+    return isMac ? "Cmd+K" : "Ctrl+K";
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -68,7 +78,7 @@ const SearchBar = ({ isMobile = false }: SearchBarProps) => {
       <input
         ref={inputRef}
         type="text"
-        placeholder="Search snippets (Cmd+K)..."
+        placeholder={`Search snippets (${keyboardHint})...`}
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         className="w-full rounded-full border border-amber-300/70 bg-white py-3 pl-12 pr-12 shadow-[0_0_20px_rgba(245,158,11,0.12)] transition placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-300 dark:border-yellow-400/60 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder-zinc-500 dark:focus:ring-yellow-400"
