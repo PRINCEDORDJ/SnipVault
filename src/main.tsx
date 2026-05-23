@@ -9,12 +9,12 @@ import { ErrorProvider } from "./context/ErrorContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AuthProvider>
-      <ErrorProvider>
-      <SnipProvider>
-        <App />
-      </SnipProvider>
-      </ErrorProvider>
-   </AuthProvider>
+    <ErrorProvider>
+      <AuthProvider>
+        <SnipProvider>
+          <App />
+        </SnipProvider>
+      </AuthProvider>
+    </ErrorProvider>
   </StrictMode>,
 );
