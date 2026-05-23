@@ -19,7 +19,7 @@ const ErrorAlert = () => {
 
   return (
     <div
-      className="fixed left-100 right-5  bottom-6  z-50 max-w-md rounded-2xl border border-red-300 bg-red-50 p-4 shadow-[0_0_24px_rgba(239,68,68,0.2)] dark:border-red-800 dark:bg-red-950/40 dark:shadow-[0_0_24px_rgba(239,68,68,0.15)] sm:bottom-8 sm:left-8 sm:right-auto"
+      className="fixed left-100 right-5  bottom-6  z-50 max-w-md rounded-2xl border border-red-300 bg-red-50 p-4 shadow-[0_0_24px_rgba(239,68,68,0.2)] dark:border-red-800 dark:bg-red-950/40 dark:shadow-[0_0_24px_rgba(239,68,68,0.15)] sm:bottom-8 sm:left-1/2 sm:right-5"
       role="alert"
       aria-live="assertive"
     >
