@@ -9,13 +9,15 @@ const Dashboard = () => {
   const { snippet } = useSnip()!;
   const { searchQuery } = useSearch()!;
 
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+
   const filtered = snippet?.filter((s) => {
     const matchesLanguage =
       activeFilter === "All" || s.language === activeFilter;
-    const matchesSearch = searchQuery.toLowerCase() === "" ||
-      s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.note.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = normalizedQuery === "" ||
+      s.title.toLowerCase().includes(normalizedQuery) ||
+      s.code.toLowerCase().includes(normalizedQuery) ||
+      s.note.toLowerCase().includes(normalizedQuery);
 
     return matchesLanguage && matchesSearch;
   });
