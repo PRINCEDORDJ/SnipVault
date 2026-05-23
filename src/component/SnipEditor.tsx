@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSnip } from "../context/SnipContext";
+import { useError } from "../context/ErrorContext";
 import { Languages } from "../constants/languages";
 import {
   Select,
@@ -17,16 +18,13 @@ const SnipEditor = () => {
   const [language, setLanguage] = useState<string>("");
   const [note, setNote] = useState<string>("");
   const { addSnip } = useSnip()!;
-  const [error, setError] = useState<string | null>(null);
+  const { setError } = useError();
 
   const navigate = useNavigate();
 
   const Submit = () => {
     if (!title || !code || !language) {
-      setError("Input fields cannot be empty");
-      setTimeout(() => {
-        setError(null);
-      }, 2000);
+      setError("Please fill in all required fields: Title, Language, and Code");
       return;
     }
 
@@ -115,8 +113,6 @@ const SnipEditor = () => {
               className="w-full rounded-2xl border border-amber-300/70 bg-white p-3 outline-none transition placeholder:text-zinc-400 focus:ring-2 focus:ring-amber-300 dark:bg-black"
             />
           </div>
-
-          <div>{error && <p className="text-red-500">{error}</p>}</div>
 
           <div className="flex items-center justify-end gap-2">
             <div className="rounded-full border border-amber-300/70 p-0.5">

@@ -7,6 +7,8 @@ import { useState } from "react";
 import Confirmation from "./component/Confirm";
 import { useAuth } from "./context/AuthContext";
 import { SearchProvider } from "./context/SearchContext";
+import { ErrorProvider } from "./context/ErrorContext";
+import ErrorAlert from "./component/ErrorAlert";
 import { Loader2 } from "lucide-react";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -28,28 +30,31 @@ const App = () => {
             <span className="sr-only">Loading</span>
           </div>
         ) : (
-          <SearchProvider>
-            <Router>
-              {session ? (
-                <div className="min-h-screen">
-                  <Navbar theme={theme} setTheme={setTheme} />
-                  <div className="min-h-screen w-full px-4 pb-10 pt-24 sm:px-6 lg:pl-[124px] lg:pr-8 lg:pt-8">
+          <ErrorProvider>
+            <SearchProvider>
+              <Router>
+                {session ? (
+                  <div className="min-h-screen">
+                    <Navbar theme={theme} setTheme={setTheme} />
+                    <div className="min-h-screen w-full px-4 pb-10 pt-24 sm:px-6 lg:pl-[124px] lg:pr-8 lg:pt-8">
+                      <Routes>
+                        <Route path="/" element={<Dashboard />} />
+                        <Route path="/create" element={<CreateSnip />} />
+                      </Routes>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
                     <Routes>
-                      <Route path="/" element={<Dashboard />} />
-                      <Route path="/create" element={<CreateSnip />} />
+                      <Route path="/" element={<Auth />} />
+                      <Route path="/confirm" element={<Confirmation />} />
                     </Routes>
                   </div>
-                </div>
-              ) : (
-                <div>
-                  <Routes>
-                    <Route path="/" element={<Auth />} />
-                    <Route path="/confirm" element={<Confirmation />} />
-                  </Routes>
-                </div>
-              )}
-            </Router>
-          </SearchProvider>
+                )}
+              </Router>
+              <ErrorAlert />
+            </SearchProvider>
+          </ErrorProvider>
         )}
         <Analytics />
       </div>
