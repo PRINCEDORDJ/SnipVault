@@ -10,7 +10,6 @@ import {
   X,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import SearchBar from "./SearchBar";
 
 const NavLinks = [
   {
@@ -97,10 +96,6 @@ const Navbar = ({
               })}
             </nav>
 
-            <div className="mt-6 w-12">
-              <SearchBar isMobile={false} />
-            </div>
-
             <div className="absolute bottom-5 flex flex-col items-center gap-4">
               <button
                 type="button"
@@ -145,10 +140,6 @@ const Navbar = ({
               <Menu size={22} />
             </button>
           </div>
-        </div>
-
-        <div className="border-b border-amber-300/70 bg-white/92 px-4 py-3 shadow-[0_8px_26px_rgba(245,158,11,0.14)] backdrop-blur-xl dark:bg-black/92 lg:hidden">
-          <SearchBar isMobile={true} />
         </div>
       </div>
       <div>
