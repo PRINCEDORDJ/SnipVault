@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
-import { SearchContext, SearchContextType } from "./searchContextCore";
+import { SearchContext } from "./searchContextCore";
+import type { SearchContextType } from "./searchContextCore";
 
 export const SearchProvider = ({ children }: { children: React.ReactNode }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");

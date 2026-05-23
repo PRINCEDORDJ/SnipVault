@@ -14,9 +14,7 @@ const App = () => {
   const [theme, setTheme] = useState(
     () => localStorage.getItem("theme") ?? "light",
   );
-  console.log("[v0] App component rendering");
   const { session, loading } = useAuth();
-  console.log("[v0] Auth state:", { session: session ? "logged in" : "logged out", loading });
 
   return (
     <div className={theme}>
