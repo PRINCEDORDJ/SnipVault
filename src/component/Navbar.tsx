@@ -10,7 +10,6 @@ import {
   X,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import SearchBar from "./SearchBar";
 
 const NavLinks = [
   {
@@ -57,11 +56,8 @@ const Navbar = ({
 
   return (
     <>
-      <div className="hidden fixed right-8 top-8 z-20 lg:block">
-        <SearchBar isMobile={false} />
-      </div>
       <div className="fixed left-0 top-0 z-20 w-full lg:left-5 lg:top-4 lg:w-auto">
-        <aside className="hidden h-[calc(100vh-2rem)] w-full rounded-full border border-amber-300/70 bg-white/90 shadow-[0_0_34px_rgba(245,158,11,0.24)] backdrop-blur-xl dark:border-yellow-400/60 dark:bg-black/90 dark:shadow-[0_0_42px_rgba(250,204,21,0.28)] lg:fixed lg:left-5 lg:top-4 lg:block lg:h-[calc(100vh-2rem)] lg:w-[78px]">
+        <aside className="hidden h-[calc(100vh-2rem)] w-[78px] rounded-full border border-amber-300/70 bg-white/90 shadow-[0_0_34px_rgba(245,158,11,0.24)] backdrop-blur-xl dark:border-yellow-400/60 dark:bg-black/90 dark:shadow-[0_0_42px_rgba(250,204,21,0.28)] lg:block">
           <div className="relative flex h-full flex-col items-center">
             <Link
               to="/"
@@ -124,28 +120,25 @@ const Navbar = ({
         </aside>
 
         <div className="border-b border-amber-300/70 bg-white/92 px-4 py-3 shadow-[0_8px_26px_rgba(245,158,11,0.14)] backdrop-blur-xl dark:bg-black/92 lg:hidden">
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <Link to="/" className="flex items-center gap-3">
-                <img
-                  src="/logo.png"
-                  width={42}
-                  height={42}
-                  alt="SnipVault"
-                  className="rounded-full border border-amber-300 object-cover"
-                />
-                <h1 className="text-xl font-black tracking-tight">SnipVault</h1>
-              </Link>
-              <button
-                type="button"
-                onClick={() => setOpen(true)}
-                className="grid size-11 place-items-center rounded-full border border-amber-300 text-zinc-900 shadow-[0_0_16px_rgba(245,158,11,0.18)] dark:text-zinc-100"
-                aria-label="Open navigation"
-              >
-                <Menu size={22} />
-              </button>
-            </div>
-            <SearchBar isMobile={true} />
+          <div className="flex items-center justify-between">
+            <Link to="/" className="flex items-center gap-3">
+              <img
+                src="/logo.png"
+                width={42}
+                height={42}
+                alt="SnipVault"
+                className="rounded-full border border-amber-300 object-cover"
+              />
+              <h1 className="text-xl font-black tracking-tight">SnipVault</h1>
+            </Link>
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              className="grid size-11 place-items-center rounded-full border border-amber-300 text-zinc-900 shadow-[0_0_16px_rgba(245,158,11,0.18)] dark:text-zinc-100"
+              aria-label="Open navigation"
+            >
+              <Menu size={22} />
+            </button>
           </div>
         </div>
       </div>

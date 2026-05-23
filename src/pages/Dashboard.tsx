@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Languages } from "../constants/languages";
 import { useSnip } from "../context/SnipContext";
 import { useSearch } from "../context/SearchContext";
+import SearchBar from "../component/SearchBar";
 import SnipTemplate from "../component/SnipTemplate";
 
 const Dashboard = () => {
@@ -80,6 +81,10 @@ const Dashboard = () => {
             );
           })}
         </div>
+      </section>
+
+      <section className="rounded-[2rem] border border-amber-300/70 bg-white p-4 shadow-[0_0_30px_rgba(245,158,11,0.1)] dark:bg-black sm:p-5">
+        <SearchBar />
       </section>
 
       <section className="grid grid-cols-1 gap-4 xl:grid-cols-2">
