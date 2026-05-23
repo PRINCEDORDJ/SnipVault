@@ -1,11 +1,13 @@
 import { useEffect, useState, type ReactNode } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { AuthContext } from "./AuthContext";
+import { useError } from "./ErrorContext";
 import { Supabase } from "../supabase/Supabase";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [session, setSession] = useState<Session | null>(null)
     const [loading, setLoading] = useState(true)
+    const { setError } = useError()
 
     const fetchSession = async () => {
         try {
@@ -32,7 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const { error } = await Supabase.auth.signInWithPassword({ email, password })
 
         if (error) {
-            console.error("Error Signing In", error.message)
+            setError(`Login failed: ${error.message}`)
         }
     }
 
@@ -57,7 +59,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const { error } = await Supabase.auth.signOut()
 
         if (error) {
-            console.error("Error Signing Out", error.message);
+            setError(`Logout failed: ${error.message}`);
         }
     }
 

@@ -1,5 +1,6 @@
 import { useState, useContext, createContext, useEffect } from "react";
 import { useAuth } from "./AuthContext";
+import { useError } from "./ErrorContext";
 import { Supabase } from "../supabase/Supabase";
 
 interface Snippet {
@@ -28,18 +29,18 @@ export const SnipContext = createContext<SnipContextType | undefined>(
 
 export const SnipProvider = ({ children }: { children: React.ReactNode }) => {
   const [snippet, setSnippet] = useState<Snippet[] | null>(null);
-    const { session } = useAuth();
+  const { session } = useAuth();
+  const { setError } = useError();
 
-    const fetchSnippets = async () => {
-        const { data, error } = await Supabase.from('Snippets').select('*').order('created_at', {ascending: true})
-       
-
-      if (error) {
-        console.error('Error Loading Snippets', error.message);
-        return;
-      }
-       setSnippet(data);
+  const fetchSnippets = async () => {
+    const { data, error } = await Supabase.from('Snippets').select('*').order('created_at', {ascending: true})
+    
+    if (error) {
+      setError(`Failed to load snippets: ${error.message}`);
+      return;
     }
+    setSnippet(data);
+  }
     
   useEffect(() => { 
     fetchSnippets();
@@ -78,7 +79,7 @@ export const SnipProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     if (error) {
-      console.error("Error adding snippets", error.message);
+      setError(`Failed to add snippet: ${error.message}`);
       return;
     }
   };
@@ -86,7 +87,7 @@ export const SnipProvider = ({ children }: { children: React.ReactNode }) => {
   const deleteSnip = async (id: number) => {
     const { error } = await Supabase.from("Snippets").delete().eq("id", id);
     if (error) {
-      console.error("Error snippets", error.message);
+      setError(`Failed to delete snippet: ${error.message}`);
       return;
     }
     setSnippet((prev)=>prev?.filter((p:any)=> p.id !== id) ?? null)
