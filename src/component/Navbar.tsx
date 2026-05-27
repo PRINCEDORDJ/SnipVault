@@ -6,6 +6,7 @@ import {
   Menu,
   Moon,
   Plus,
+  Settings,
   Sun,
   X,
 } from "lucide-react";
@@ -21,6 +22,11 @@ const NavLinks = [
     name: "Create",
     path: "/create",
     icon: Plus,
+  },
+  {
+    name: "Settings",
+    path: "/settings",
+    icon: Settings,
   },
 ];
 

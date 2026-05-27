@@ -2,11 +2,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./component/Navbar";
 import Dashboard from "./pages/Dashboard";
 import CreateSnip from "./pages/CreateSnip";
+import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
 import { useState } from "react";
 import Confirmation from "./component/Confirm";
 import { useAuth } from "./context/AuthContext";
 import { SearchProvider } from "./context/SearchContext";
+import { UsernameProvider } from "./context/UsernameContext";
 import ErrorAlert from "./component/ErrorAlert";
 import { Loader2 } from "lucide-react";
 import { Analytics } from "@vercel/analytics/react";
@@ -29,29 +31,32 @@ const App = () => {
             <span className="sr-only">Loading</span>
           </div>
         ) : (
-          <SearchProvider>
-            <Router>
-              {session ? (
-                <div className="min-h-screen">
-                  <Navbar theme={theme} setTheme={setTheme} />
-                  <div className="min-h-screen w-full px-4 pb-10 pt-24 sm:px-6 lg:pl-[124px] lg:pr-8 lg:pt-8">
+          <UsernameProvider>
+            <SearchProvider>
+              <Router>
+                {session ? (
+                  <div className="min-h-screen">
+                    <Navbar theme={theme} setTheme={setTheme} />
+                    <div className="min-h-screen w-full px-4 pb-10 pt-24 sm:px-6 lg:pl-[124px] lg:pr-8 lg:pt-8">
+                      <Routes>
+                        <Route path="/" element={<Dashboard />} />
+                        <Route path="/create" element={<CreateSnip />} />
+                        <Route path="/settings" element={<Settings />} />
+                      </Routes>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
                     <Routes>
-                      <Route path="/" element={<Dashboard />} />
-                      <Route path="/create" element={<CreateSnip />} />
+                      <Route path="/" element={<Auth />} />
+                      <Route path="/confirm" element={<Confirmation />} />
                     </Routes>
                   </div>
-                </div>
-              ) : (
-                <div>
-                  <Routes>
-                    <Route path="/" element={<Auth />} />
-                    <Route path="/confirm" element={<Confirmation />} />
-                  </Routes>
-                </div>
-              )}
-            </Router>
-            <ErrorAlert />
-          </SearchProvider>
+                )}
+              </Router>
+              <ErrorAlert />
+            </SearchProvider>
+          </UsernameProvider>
         )}
         <Analytics />
       </div>
